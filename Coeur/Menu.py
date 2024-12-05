@@ -1,7 +1,7 @@
 "Code du Menu Principal du jeu"
 
 import pygame
-from Coeur.game import *
+from Coeur import Game
 
 class Menu():
     def __init__(self, game):
