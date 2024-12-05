@@ -1,12 +1,12 @@
 "Code du Menu Principal du jeu"
 
 import pygame
-from Coeur import Game
+from Coeur.Game import *
 
 class Menu():
     def __init__(self, game):
         self.game = game
-        self.mid_x, self.mid_y = self.game.DISPLAY_X / 2, self.game.DISPLAY_Y / 2  # Calcul des positions centrales de l'écran.
+        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2  # Calcul des positions centrales de l'écran.
         self.run_display = True
         self.curseur_rect = pygame.Rect(0, 0, 20, 20)  # Rectangle pour représenter le curseur.
         self.offset = -100  # Décalage horizontal pour positionner le curseur.
@@ -22,27 +22,27 @@ class Menu():
         self.game.reset_keys()  # Réinitialise les touches appuyées.
 
 # Classe pour le menu principal.
-class MenuPrincipal(Menu):
+class MainMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)  # Appelle du constructeur.
         self.state = "Commencer Jeu"  # État actuel du menu.
         # Coordonnées pour chaque option du menu.
-        self.startx, self.starty = self.mid_x, self.x
-        self.rulesx, self.rulesy = self.mid_x, self.x + 35
-        self.creditsx, self.creditsy = self.mid_x, self.x + 70
-        self.quitx, self.quity = self.mid_x, self.x + 105
+        self.startx, self.starty = self.mid_w, self.mid_h
+        self.rulesx, self.rulesy = self.mid_w, self.mid_h + 35
+        self.creditsx, self.creditsy = self.mid_w, self.mid_h + 70
+        self.quitx, self.quity = self.mid_w, self.mid_h + 105
         # Position initiale du curseur.
         self.curseur_rect.midtop = (self.startx + self.offset, self.starty)
 
     # Affiche le menu principal.
-    def afficher_menu(self):
+    def display_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()  # Vérifie les événements du joueur.
             self.check_input()  # Gère les entrées utilisateur.
             self.game.display.fill(self.game.BLACK)  # Remplit l'écran de noir.
             # Texte du titre et des options.
-            self.game.draw_text('JUMPEL QUEST', 50, self.game.DISPLAY_X / 2, self.game.DISPLAY_Y / 2 - 80)
+            self.game.draw_text('JUMPEL QUEST', 50, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 80)
             self.game.draw_text("Commencer Jeu", 30, self.startx, self.starty)
             self.game.draw_text("REGLES", 30, self.rulesx, self.rulesy)
             self.game.draw_text("CREDITS", 30, self.creditsx, self.creditsy)
@@ -51,7 +51,7 @@ class MenuPrincipal(Menu):
             self.blit_screen()  # Met à jour l'écran.
 
     # Déplace le curseur entre les options du menu.
-    def deplacer_curseur(self):
+    def move_cursor(self):
         if self.game.DOWN_KEY:  # Si la touche "Bas" est pressée.
             # Change l'état et positionne le curseur pour chaque option.
             if self.state == 'Commencer Jeu':
@@ -98,12 +98,12 @@ class MenuPrincipal(Menu):
             quit()  # Quitte le jeu.
 
 # Classe pour le menu des règles.
-class MenuRegles(Menu):
+class RulesMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
 
     # Affiche les règles du jeu.
-    def afficher_menu(self):
+    def display_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()
@@ -123,7 +123,7 @@ class CreditsMenu(Menu):
         Menu.__init__(self, game)  # Appelle le constructeur de la classe parente.
 
     # Affiche le menu des crédits.
-    def afficher_menu(self):
+    def display_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()  # Vérifie les événements utilisateur.
@@ -137,18 +137,18 @@ class CreditsMenu(Menu):
             self.blit_screen()
             
 # Classe pour gérer le menu de confirmation de sortie.
-class QuitterMenu(Menu): 
+class QuitMenu(Menu): 
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'OUI'
         # Coordonnées des options "OUI" et "NON".
-        self.yesx, self.yesy = self.mid_x, self.x
-        self.nox, self.noy = self.mid_x, self.x + 35
+        self.yesx, self.yesy = self.mid_w, self.mid_h
+        self.nox, self.noy = self.mid_w, self.mid_h + 35
         # Position initiale du curseur.
         self.curseur_rect.midtop = (self.yesx + self.offset, self.yesy)
 
     # Affiche le menu de confirmation.
-    def afficher_menu(self):
+    def display_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()

@@ -1,7 +1,7 @@
 #Code Princiapale Du jeu"
 
 import pygame
-from Coeur import Menu
+from Coeur.Menu import MainMenu, RulesMenu, CreditsMenu, QuitMenu
 
 
 class Game():
@@ -9,16 +9,16 @@ class Game():
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_X, self.DISPLAY_Y = 1200, 495 # Dimensions de l'écran.
-        self.display = pygame.Surface((self.DISPLAY_X, self.DISPLAY_Y)) # Surface d'affichage principale.
-        self.window = pygame.display.set_mode(((self.DISPLAY_X, self.DISPLAY_Y))) # Fenêtre principale.
+        self.DISPLAY_W, self.DISPLAY_H = 1200, 495 # Dimensions de l'écran.
+        self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H)) # Surface d'affichage principale.
+        self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H))) # Fenêtre principale.
         self.font_name = pygame.font.get_default_font()  # Police par défaut de Pygame.
         self.BLACK, self.WHITE, self.RED, self.GREEN, self.ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (0, 255, 0), (255, 165, 0) # Définition des couleurs principales.
         # Initialisation des menus.
-        self.main_menu = MenuPrincipal(self)
-        self.rules = MenuRegles(self)
+        self.main_menu = MainMenu(self)
+        self.rules = RulesMenu(self)
         self.credits = CreditsMenu(self)
-        self.quit = QuitterMenu(self)
+        self.quit = QuitMenu(self)
         self.curr_menu = self.main_menu 
 
     # Boucle principale du jeu.
@@ -26,7 +26,7 @@ class Game():
         while self.playing:
             self.check_events()
             self.display.fill(self.BLACK)
-            self.draw_text('FIN DU JEU', 20, self.DISPLAY_X / 2, self.DISPLAY_Y / 2)
+            self.draw_text('FIN DU JEU', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2)
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
             self.reset_keys()
