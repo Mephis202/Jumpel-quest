@@ -1,6 +1,7 @@
 "Code du Menu Principal du jeu"
 
 import pygame
+from Coeur.game import *
 
 class Menu():
     def __init__(self, game):
@@ -102,7 +103,7 @@ class MenuRegles(Menu):
         Menu.__init__(self, game)
 
     # Affiche les règles du jeu.
-    def display_menu(self):
+    def afficher_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()
@@ -122,7 +123,7 @@ class CreditsMenu(Menu):
         Menu.__init__(self, game)  # Appelle le constructeur de la classe parente.
 
     # Affiche le menu des crédits.
-    def display_menu(self):
+    def afficher_menu(self):
         self.run_display = True
         while self.run_display:
             self.game.check_events()  # Vérifie les événements utilisateur.
@@ -130,36 +131,34 @@ class CreditsMenu(Menu):
             if self.game.START_KEY or self.game.BACK_KEY:
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
-            # Remplit l'écran de noir et affiche les crédits.
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('CREDITS', 50, self.game.DISPLAY_W / 2, self.game.Y / 2 - 80)
             self.game.draw_text('Fait par Yassine Aouane', 30, self.game.DISPLAY_W / 2, self.game.Y / 2)
-            self.blit_screen()  # Met à jour l'affichage.
-
+            self.blit_screen()
+            
 # Classe pour gérer le menu de confirmation de sortie.
-class QuitMenu(Menu): 
+class QuitterMenu(Menu): 
     def __init__(self, game):
-        Menu.__init__(self, game)  # Appelle le constructeur de la classe parente.
-        self.state = 'YES'  # État initial du menu ("YES" sélectionné).
-        # Coordonnées des options "YES" et "NO".
-        self.yesx, self.yesy = self.mid_w, self.x
-        self.nox, self.noy = self.mid_w, self.x + 35
+        Menu.__init__(self, game)
+        self.state = 'OUI'
+        # Coordonnées des options "OUI" et "NON".
+        self.yesx, self.yesy = self.mid_x, self.x
+        self.nox, self.noy = self.mid_x, self.x + 35
         # Position initiale du curseur.
         self.curseur_rect.midtop = (self.yesx + self.offset, self.yesy)
 
     # Affiche le menu de confirmation.
-    def display_menu(self):
+    def afficher_menu(self):
         self.run_display = True
         while self.run_display:
-            self.game.check_events()  # Vérifie les événements utilisateur.
-            self.check_input()  # Gère les entrées utilisateur.
+            self.game.check_events()
+            self.check_input()
             self.game.display.fill((0, 0, 0))  # Remplit l'écran de noir.
-            # Affiche le message de confirmation et les options.
-            self.game.draw_text('ETES VOUS SUR DE VOULOIR?', 50, self.game.DISPLAY_W / 2, self.game.Y / 2 - 80)
-            self.game.draw_text('YES', 30, self.yesx, self.yesy)
-            self.game.draw_text('NO', 30, self.nox, self.noy)
-            self.draw_curseur()  # Dessine le curseur.
-            self.blit_screen()  # Met à jour l'écran.
+            self.game.draw_text('ETES VOUS SUR DE VOULOIR QUITTER?', 50, self.game.DISPLAY_W / 2, self.game.Y / 2 - 80)
+            self.game.draw_text('OUI', 30, self.yesx, self.yesy)
+            self.game.draw_text('NON', 30, self.nox, self.noy)
+            self.draw_curseur()
+            self.blit_screen()
 
     # Gère les entrées utilisateur dans le menu de confirmation.
     def check_input(self):
@@ -167,19 +166,19 @@ class QuitMenu(Menu):
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
-        # Si une touche "UP" ou "DOWN" est pressée, alterne entre "YES" et "NO".
+        # Si une touche "UP" ou "DOWN" est pressée, alterne entre "OUI" et "NON".
         elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'YES':
-                self.state = 'NO'
+            if self.state == 'OUI':
+                self.state = 'NON'
                 self.curseur_rect.midtop = (self.nox + self.offset, self.noy)
-            elif self.state == 'NO':
-                self.state = 'YES'
+            elif self.state == 'NON':
+                self.state = 'OUI'
                 self.curseur_rect.midtop = (self.yesx + self.offset, self.yesy)
         # Si la touche "START" est pressée.
         elif self.game.START_KEY:
-            if self.state == 'YES':  # Quitte le jeu si "YES" est sélectionné.
-                Quitter()
-            if self.state == 'NO':  # Retourne au menu principal si "NO" est sélectionné.
+            if self.state == 'OUI':  # Quitte le jeu si "OUI" est sélectionné.
+                quit()
+            if self.state == 'NON':  # Retourne au menu principal si "NON" est sélectionné.
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
 
