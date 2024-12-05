@@ -1,113 +1,117 @@
-# Code des Monde du jeu
-### Variables: "X" = Tuile
-# ; "P" = Piege 
-# ; "M" = Marchand 
-# ; "E" = Ennemi 
-# ; "-" = Route d'un enemie 
-# ; "C" = Piques cachés 
-# ; "N" = Niveau terminé
+### Variables: "X" = Tile ;; "P" = Pique ; "M" = Marchand ; "E" = Ennemi ; "-" = Reverse d'un enemie ; "C" = Piques cachés ; "N" = Niveau terminé
 
 map_list = [
 
-
-
-[ # Monde Démo modifié pour tester le personnage avec des éléments différents.
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXC          E           CXX',
-'XXXXXX            XXXX      XX',
-'XXXXXX                      XX',
-'XXX           XXXX          XX',
-'X    XXXXXX          XXXX    X',
-'X        CXXXXX            CXX',
-'XS              E      XXX   X',
-'X          CC       CC       N',
-'XXXXXXXXXXXXXXXXPPPPPPXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
-    
-
-[ # Monde 1 Niveau 1 - Ajout de nouveaux pièges et zones ennemies.
+[ #Map démo qui a pour but de tester le personnage
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXC                         XX',
-'X     C   - E   -      C     X',
-'X       XXXXXXXX     XXXX    X',
-'X                          CXX',
-'X   XXXXX        XXXX      XXX',
-'XS         PPCC         CC   N',
-'XXXXXXXXXXXXXCCPPPPPPPPPPXXXXX',
+'XXXXXXXXXXXXXX       XXXXXXXXX',
+'XXXXXXXXXXXX           XXXXXXX',
+'XXXXXXX                      X',
+'XXXXXX        XXX           XX',
+'XXXXX               XXX   XXXX',
+'XXX       XXX              XXX',
+'X                    XXX     N',
+'XS     XXXXXXXXXPPPPPXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
+
+
+[ #Monde 1 Niveau 1 (Il y a 8 niveaux par monde)
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
-
-
-[ # Monde 1 Niveau 2 - Nouveau niveau avec plus de variabilité.
-'X                            N',
-'X          CC    -E-         N',
-'X    C    XXXX          CC   N',
-'X    XXXXXX            XXXX  N',
-'X   XXX        XXXX          N',
-'XS               XX   XXX    N',
-'XX           CXX         X   N',
-'XXXCCC    XX   - E-     XXX  N',
-'XXXXXXXXXXXXXXXXXXPPPPPPPPXXX',
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXX              XXXXXXXX',
+'XXXX                      XXXX',
+'X                           XX',
+'X                  XX        N',
+'XS        PP      XXXXXXX    N',
+'XXXXXXPPXXXXXXXXPPXXXXXXXXXXXX',  ### Placer des piques dans les cases "P"
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
 
 
-[ # Monde 1 Niveau 3 - Ajout de mouvements complexes d'ennemis et de zones cachées.
+[ #Monde 1 Niveau 2
 'X                            N',
 'X                            N',
 'X                            N',
-'X           C    C           N',
-'XS         XXX    XX       CCC',
-'X    C- E   E  E -XX         N',
-'X     XX      XXXX      CC   N',
-'XXXCCCCCCCCCCPPPPPPPPPPPPPPXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
+'X                            N',
+'X            CC              N',
+'X                            N',
+'X        XXX                 N',
+'X   XXX                XX    N',
+'XS                 XX  XXX   N',
+'XXXPPPPPPPPPPXXXXPPXXPPXXXX  N', ### "P"
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
 
 
-[ # Monde 1 Niveau 4 - Introduction de pièges interactifs et de sections marchandes.
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXX                N',
-'XXXCCC       XX              N',
-'X        E    -E   -    E    N',
-'X   XXXXXXX   XXXXX          N',
-'X   XXXXXCCC  CCCC           N',
-'XS CCC         XX            N',
-'XXX   XXXX           XX      N',
-'XXXXXX   CCXXXXX      XX     N',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
+
+[ #Monde 1 Niveau 3
+'X                            X',
+'X                XXX         X',
+'X                            N',
+'X            XXX             N',
+'X                            N',
+'X        XXX           XXX   X',
+'X                            X',
+'X    XXX                     X',
+'X                            X',
+'XS XPPPPPPPPPPPPPPPPPPPPPPPPPX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
 
 
-[ # Monde Intermédiaire avec Marchand
+[ #Monde 1 Niveau 4
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXX      CXXXXXXX       N',
-'X               CCCC         N',
-'X         XXXXX              N',
-'XS XX      MB          CCCCCCX',
-'X  XXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
+'XXX       XXXXXXXXXXXXXXXXXXXX',
+'X     -E -XXXXXX          XXXX',
+'X     XXXX                   X',
+'XXX                          N',
+'XXXX                         N',
+'XX     XXX                   N',
+'X                    XXX     N', ### Placer un ennemi dans la case "E"
+'XS XXXX-        E  -XXXXX    N', ### Les cases "-" representent la zone de mouvement de l'ennemi
+'XXXXXXXXXXXXXXXXXXXXXXXXXPPXXX', ### "P"
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
 
 
-[ # Monde 1 Niveau 5 - Un mélange de pièges et d’ennemis mobiles.
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XX              CC          XX',
-'X    C         XXXXXC        X',
-'X   C      E        -E       N',
-'XS   XXXXX           CC     XX',
-'XX        XX         XXX     N',
-'XXX         CXXXX    XX     XX',
-'XXXX  PPCCPPPPPPPPPPPPPPP   XX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
 
 
+
+[ #Monde dans lequel le personnage peut interagir avec le marchand
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXX XXX      XXXXXXXXXX',
+'XXXXXXXX    X         XXXXXXXX',
+'X                     X      N',
+'X           XXXXXXX   X      N',
+'X     XXX                    N',
+'X                 XX   XX    N', ### Placer le marchand dans les cases "M"
+'XS XX           MBXXXXXXXX  XX', ### "M"
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+,
+
+
+
+
+
+[ #Monde 1 Niveau 5
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XX                           X',
+'X                            X',
+'X                            X',
+'X                            N',
+'X                 XXX        N',
+'XS    X                      N',
+'XX-   E-X    XXXX   -   E    -N', ### "E" et "-"
+'XXXXXXXXXPP       PPXXXXXXXXXX', ### "P"
+'XXXXXXXXXXXPPPPPPPXXXXXXXXXXXX'] ### "P"
+,
 
 
 [ #Monde 1 Niveau 6
@@ -297,7 +301,7 @@ map_list = [
 ,
 
 
-[ #Niveau de fin
+[ #Niveau de fin de jeu, il ne sert à rien
 '                           X',
 '                           X',
 '                           X',
@@ -311,3 +315,17 @@ map_list = [
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 
 ]
+
+bonus_lvl = [ #Niveau Bonus
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ',
+'                            ']
+

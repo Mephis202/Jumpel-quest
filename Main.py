@@ -1,25 +1,20 @@
-"Code du Menu Principal du jeu"
-
 import pygame
 from os import walk
 from random import randint
 from pygame.locals import *
 
-
-from Coeur.Game import *
-from Sprite.Fond import background
-from Sprite.Tuile import tuiles
-from Map.Monde import map_list as map_list
-from Sprite.Merchant import merchant, shelf
-
+from Core.game import *
+from Sprite.cosmo import background
+from Sprite.tile import tiles
+from Map.map_config import map_list as map_list
+from Sprite.merchant import merchant, shelf
 
 start_time = None
-g = Game()
+g = Game() 
 while g.running:
     g.curr_menu.display_menu()
     g.game_loop()
 
-#surface = pygame.display.get_surface()  #Obtenir la surface de l'écran actuel
 DISPLAY_W, DISPLAY_H = 1200, 465
 
 win = pygame.display.set_mode(((DISPLAY_W, DISPLAY_H)))
@@ -35,11 +30,9 @@ power_font =  pygame.font.Font(None, 38)
 click = False
 
 
-##------------------------------------##
-##------------------------------------##
+
 ##--------SCRIPT POUR LE PERSO--------##
-##------------------------------------##
-##------------------------------------##
+
 
 def import_folder(path):  #fonction qui prend les sprite correspondant au touches
     surface_list = []
@@ -56,33 +49,33 @@ def import_folder(path):  #fonction qui prend les sprite correspondant au touche
 clock = pygame.time.Clock()
 
 
-class Player(pygame.sprite.Sprite): #class du player
-    speed = 11 #la vitesse su player 
-    gravity = 1.6 #la gravité du player qui influence sur la hauteur de son saut
+class Player(pygame.sprite.Sprite): #class du joueur
+    speed = 11 #la vitesse du joueur  
+    gravity = 1.6 #la gravité du joueur 
     
     def __init__(self, pos):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
-        self.animation_speed = 0.80 # à quelle vitesse les animation du personnage vont défiler 
+        self.animation_speed = 0.80 # la vitesse des annimation du du joueur 
         self.image = self.animations['Sprite_Cosmo_R'][self.frame_index]
         self.rect = self.image.get_rect(topleft=pos)
 
-        #player movement
-        self.speed = self.speed #la vitesse su player 
+        #Mouvement du  joueur 
+        self.speed = self.speed #la vitesse du joueur 
         self.direction = pygame.math.Vector2(0, 0)
         self.gravity = self.gravity
-        self.jump_speed = -19 #la vitesse du saut de player
+        self.jump_speed = -19 #la vitesse du saut du joueur 
         self.double = 0
 
-        #player staus
+        #Status du joueur 
         self.status = 'idle'
         self.on_ground = False
 
 
     def import_character_assets(self):
         character_path = 'Sprite/Sprite_png/'
-        self.animations = { #on créer un dictionnaire de liste avec toutes les sprites qui vont devoir etre animé
+        self.animations = { # Dictionnaire de liste avec toutes les sprites qui vont devoir etre animé
             'Sprite_Cosmo_R': [],
             'Sprite_Cosmo_L': [],
             'Crouch': [],
@@ -96,7 +89,7 @@ class Player(pygame.sprite.Sprite): #class du player
     def animate(self):
         animation = self.animations[self.status]
 
-        # loop over frame index
+        
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
@@ -158,16 +151,10 @@ class Player(pygame.sprite.Sprite): #class du player
         self.animate()
 
 
-##--------------------------------##
-##--------------------------------##
 ##----SCRIPT POUR LES ENNEMIS-----##
-##--------------------------------##
-##--------------------------------##
 
 
-
-
-class Spikes(pygame.sprite.Sprite): #class qui créer les spikes dans le jeu
+class Spikes(pygame.sprite.Sprite): #class qui créer les Pikes dans le jeu
     def __init__(self, pos, size, y, x):
         super().__init__()
         self.x = x
@@ -190,7 +177,7 @@ class HiddenSpike(pygame.sprite.Sprite): #la class qui créer les spikes caché 
             'Sprite/Enemy_png/hidden_spike.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
 
-class Champ(pygame.sprite.Sprite): #focntion de l'énemie champignon, qui est en mouvement
+class Champ(pygame.sprite.Sprite): #fontion des énnemie champignon
     def __init__(self, pos, size, y, x):
         super().__init__()
         self.x = x
@@ -220,24 +207,24 @@ class Champ(pygame.sprite.Sprite): #focntion de l'énemie champignon, qui est en
         if Level_Champ == 1:
             self.speed *= -1
         
-    def reverse(self): #fonction qui change le sens du champigon apres des conditions
+    def reverse(self): #fonction qui change la direction  des déplacement des champigon apres des conditions
         for return_index in Level_Champ:
-            if self.rect.colliderect(return_index): #on verifie si il y a une collision entre l'énemie est l'objet qui le fait changer de sens pour que l'enemie change de sens 
+            if self.rect.colliderect(return_index): 
                 self.speed *= -1 #change de sens
                 
-            if self.walkcount >= 30: #compteur pour les animations de l'enemie
+            if self.walkcount >= 30: #compteur pour les animations
                 self.walkcount = 0
                 
-            if self.speed < 0: #si la vitesse est inférieure on flip l'animation
-                self.image = self.walkLeft[self.walkcount//3] #animation de l'enemie
+            if self.speed < 0:
+                self.image = self.walkLeft[self.walkcount//3]
                 self.walkcount += 1
 
             else:
-                self.image = pygame.transform.flip(self.walkLeft[self.walkcount//3], True, False) #on renverse son image si il y a collision
+                self.image = pygame.transform.flip(self.walkLeft[self.walkcount//3], True, False) 
                 self.walkcount += 1
                     
 
-    def collide(self): #on vérifie si il y a collision entre le personnage et un énemie 
+    def collide(self): #on vérifie si il y a collision entre le personnage et un ennemie 
         if Level_Player.colliderect(self.rect):
             level.collide = 1
 
@@ -255,7 +242,7 @@ class Merchant(pygame.sprite.Sprite): #class qui créer le marchand
         self.image = pygame.image.load('Sprite/Merchant_png/merchant.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
     
-class Shelf(pygame.sprite.Sprite): #class qui créer le l'armoir à coter du marchand
+class Shelf(pygame.sprite.Sprite):
     def __init__(self, pos, size, y, x):
         super().__init__()
         self.x = x
@@ -267,22 +254,19 @@ class Shelf(pygame.sprite.Sprite): #class qui créer le l'armoir à coter du mar
         
         
         
-##--------------------------------##
-##--------------------------------##
+
 ##---------Menu Marchand----------##
-##--------------------------------##
-##--------------------------------##
 
 
-def draw_text(text, font, color, surface, x, y): #fonction qui permet de créer du text
+def draw_text(text, font, color, surface, x, y): 
     textobj = font.render(text, 90, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
     
     
-def merchant_menu(): #fonction du menu du marchand pour avoir des superpouvoirs
-        Index = 0 #index pour dire qu'elle superpouvoir à été choisi
+def merchant_menu(): 
+        Index = 0
 
         mBackground = pygame.Rect(270,10, 700, 440)
          
@@ -294,34 +278,33 @@ def merchant_menu(): #fonction du menu du marchand pour avoir des superpouvoirs
         pygame.draw.rect(win, (48,48,48), mBackground)
 
         pygame.draw.rect(win, (48,48,48), button_1)
-        draw_text('BOOST :   50 coins', power_font, (255, 255, 156), win, 510, 63)
+        draw_text('BOOST DE VITESSE :   50 Piece', power_font, (255, 255, 156), win, 510, 63)
         
         pygame.draw.rect(win, (48,48,48), button_2)
-        draw_text('HIGHER JUMP :  140 coins ', power_font, (255, 255, 156), win, 470, 167)
+        draw_text('BOOST DE JUMP :  140 Piece ', power_font, (255, 255, 156), win, 470, 167)
         
         pygame.draw.rect(win, (48,48,48), button_3)
-        draw_text('1 MORE LIFE :  250 coins', power_font, (255, 255, 156), win, 475, 272)
+        draw_text('1 VIE :  250 Piece', power_font, (255, 255, 156), win, 475, 272)
 
         
-        draw_text('SOME POWERS MAY BE APPLIED NEXT LEVEL', merch_font, (255, 0, 0), win, 280, 430)
     
         if button_1.collidepoint((mx, my)): #on verifie si la souris est sur une boite
                 pygame.draw.rect(win, (136, 88, 224), button_1)
-                draw_text('BOOST :   50 coins', power_font, (255, 255, 156), win, 510, 63)
+                draw_text('BOOST DE VITESSE :   50 Piece', power_font, (255, 255, 156), win, 510, 63)
                 if click and coin_sum >= 50: #on vérifie si on click sur la boite avec la souris
                     Index = 1
                 
                 
         if button_2.collidepoint((mx, my)):
                 pygame.draw.rect(win, (136, 88, 224), button_2)
-                draw_text('HIGHER JUMP :  140 coins ', power_font, (255, 255, 156), win, 470, 167)
+                draw_text('BOOST DE JUMP :  140 Piece ', power_font, (255, 255, 156), win, 470, 167)
                 if click  and coin_sum >= 140:
                     Index = 2
 
                 
         if button_3.collidepoint((mx, my)):
                 pygame.draw.rect(win, (136, 88, 224), button_3)
-                draw_text('1 MORE LIFE :  250 coins', power_font, (255, 255, 156), win, 475, 272)
+                draw_text('1 VIE :  250 Piece', power_font, (255, 255, 156), win, 475, 272)
                 if click and coin_sum >= 250:
                     Index = 3
                     
@@ -329,21 +312,17 @@ def merchant_menu(): #fonction du menu du marchand pour avoir des superpouvoirs
 
 
 
-##---------------------------------##
-##---------------------------------##
 ##-----SCRIPT POUR LES NIVEAUX-----##
-##---------------------------------##
-##---------------------------------##
 
 
 class Tile(pygame.sprite.Sprite):  #creation du tile
     def __init__(self, pos, size):
         super().__init__()
-        self.image = tuiles[0]
+        self.image = tiles[0]
         self.rect = self.image.get_rect(topleft=pos)
 
 
-class Level:  # creation du niveau avec toutes les variables qui permet de faire marcher le jeu
+class Level:  # creation du niveau
     def __init__(self, level_data, surface):
         # Level setup
         self.N_hitbox_list = []
@@ -388,12 +367,12 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
                     tile = Tile((x, y), tile_size)
                     self.tiles.add(tile)
                     
-                if cell == 'P': #création des spikes
+                if cell == 'P': #création des Pikes
                     spike1 = Spikes((x, y - 8), tile_size, 23, 23)
                     self.spike.add(spike1)
                     self.hitbox_list.append(pygame.Rect(
                         x + 2, y + 2, 36,
-                        42))  #creer une liste des hitbox pour tout les enemies, avec les quelles on vérifiera les collisions
+                        42)) 
 
                 if cell == 'S': #ou le personnage va apparaitre dans le niveau
                     player_sprite = Player((x, y))
@@ -404,7 +383,7 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
                 if cell == 'N': #pour identifier quand le joueur à atteind la fin du niveau
                     self.N_hitbox_list.append(pygame.Rect(x, y, 1, 1))
                     
-                if cell == 'E': #l'énemie champignon
+                if cell == 'E':  # Chamignon
                     mush = Champ((x, y +10), tile_size, 23, 23)
                     self.champ.add(mush)
                     self.champignon_list.append(pygame.Rect(x - 7, y+2, 36, 42))
@@ -466,22 +445,22 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
         player = self.player.sprite
         keys = pygame.key.get_pressed()
 
-        merchant_string = "Press [ O ] to access the Merchant goods!".format(coin_sum) #On creer le texte pour quand le joueur est au niveau du marchand
+        merchant_string = "Appuiyer sur [ O ] pour acceder au magazin du marchan!".format(coin_sum) 
         text_merchant = merch_font.render(merchant_string, True, (255, 255, 255))
-        if player.rect.y == self.M_y and player.rect.x < self.M_x + 80 and player.rect.x > self.M_x - 95 : #on verifie quand le joueur est au niveau du marchant pour la création de text
+        if player.rect.y == self.M_y and player.rect.x < self.M_x + 80 and player.rect.x > self.M_x - 95 : #on verifie quand le joueur est au niveau du marchant pour l' affichage du text
             win.blit(text_merchant, [self.M_x - 170 , self.M_y-85])    
             if keys[pygame.K_o]: #on vérifie si le joueur appuie sur la touche o pour ouvrir le menu du marchand
                 self.menu_pop = 1
             
         if self.menu_pop == 1: 
             merchant_menu() #on ouvre le menu
-            if player.rect.x > self.M_x + 80 or player.rect.x < self.M_x - 95 or keys[pygame.K_m]: #ce qui vérifie si le personnage quitte une certaine zone pour partir du menu ou appuie sur la touche p 
+            if player.rect.x > self.M_x + 80 or player.rect.x < self.M_x - 95 or keys[pygame.K_m]: # vérifie si le personnage quitte la zone pour partir du menu ou appuie sur la touche p 
                 self.menu_pop = 0
                 
         return self.menu_pop
         
         
-    def show(self): #fonction qui permet de  tout aficher sur l'écran
+    def show(self):
         player = self.player.sprite
         
         #les tiles du niveau
@@ -514,13 +493,13 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
         return self.N_count
         
     def champ_reverse(self):
-        return self.back_list #on retounre les coordonné des points ou les champignons vont devoir changer de sens
+        return self.back_list 
         
-    def player_return(self):  #on retourne les coordoonée du joueur pour vérifier les collision
+    def player_return(self): 
         player = self.player.sprite
         return player.rect
         
-    def colliding(self): #fonction qui verifie si le joueur a toucher un ennemis
+    def colliding(self): 
         player = self.player.sprite
         
         if player.rect.y > 400:
@@ -530,7 +509,7 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
             
                
         # Fonction si le joueur touche un énemie 
-        for hitboxes in self.hitbox_list:  #on prend chaque element de la list est creer sa hitbox sur la fenetre
+        for hitboxes in self.hitbox_list: 
             if player.rect.colliderect(hitboxes) == True: #si oui, le joueur retourne au coordonées de S
                 player.rect.x = self.S_x
                 player.rect.y = self.S_y
@@ -542,20 +521,19 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
             self.collide = 0
             self.keeps = 1
         
-        for hidden_hitboxes in self.hidden_spike_list:  #on prend chaque element de la list est creer sa hitbox sur la fenetre
-            #pygame.draw.rect(win, (255,0,0), hitboxes,2)
+        for hidden_hitboxes in self.hidden_spike_list:  
             if player.rect.colliderect(hidden_hitboxes) == True:
                 player.rect.x = self.S_x
                 player.rect.y = self.S_y
-                self.hidden_x = hidden_hitboxes[0] #donne les coordonnées du spike que l'on a toucher
+                self.hidden_x = hidden_hitboxes[0]
                 self.hidden_y = hidden_hitboxes[1]
                 self.timer = 25
                 self.keeps = 1
                     
 
         if self.timer > 0:
-            win.blit(pygame.image.load('Sprite/Enemy_png/hidden_spike.png').convert_alpha(), (self.hidden_x, self.hidden_y))#affiche le spike caché duquelle on vient de mourir
-            player.speed = 0 #on enlève la vitesse du joueur pendant quelque seconde pour pas que le joueur soit surpris
+            win.blit(pygame.image.load('Sprite/Enemy_png/hidden_spike.png').convert_alpha(), (self.hidden_x, self.hidden_y))#affiche le Pike caché duquelle on vient de mourir
+            player.speed = 0 
             self.timer -= 1
         else:
             player.speed = Player.speed
@@ -567,13 +545,11 @@ class Level:  # creation du niveau avec toutes les variables qui permet de faire
 
 level = Level(
     map_list[0],
-    win)  # maplen = le layout de la carte ; level = Level(maplen, win)
+    win)
 
-##----------------------------------##
-##----------------------------------##
+
 ##-----BOUCLE PRINCIPALE DU JEU-----##
-##----------------------------------##
-##----------------------------------##
+
 
 run = True  #Boucle principale
 movement = []
@@ -587,17 +563,16 @@ endBackground = pygame.Rect(0,0, 1400, 770)
 buttonEnd = pygame.Rect(685, 275, 310, 50)
 levelNumber = 1
 while run:
-    Level_Change = level.game_count() #on accorde içi a plusieurs fonction la valeurs de tout les return dans la class Level, pour vérifier des états
+    Level_Change = level.game_count() 
     Level_collision = level.colliding()
     Level_Marchand = level.marchand()
     Level_Champ = level.champ_reverse()
     Level_Player = level.player_return()
-    mx, my = pygame.mouse.get_pos() #ce qui donne les coordonnées de la souris, pour choisir le superpouvoirs du marchand
+    mx, my = pygame.mouse.get_pos() 
 
 
-    #--------------------------#
     #-----COMPTE A REBOURS-----#
-    #--------------------------#
+    
 
     total_seconds = frame_count // frame_rate
 
@@ -606,14 +581,14 @@ while run:
     seconds = total_seconds % 60  #avoir les secondes totales
 
     output_string = "Time: {0:02}:{1:02}".format(minutes,
-                                                 seconds)  #format du compteur
+                                                seconds)  #format du compteur
     text_timer = font.render(output_string, True, (255, 255, 255))
     win.blit(text_timer, [10, 85])
     frame_count += 2
 
-    #------------------------------#
+   
     #-----CHANGEMENT DE NIVEAU-----#
-    #------------------------------#
+  
 
     if Level_Change == 1:  #On vérifie si le joueur a atteint la fin du niveau
         level.N_count = 0
@@ -626,7 +601,7 @@ while run:
         frame_count = 0  #reset le compteur
     
     
-    draw_text('Level: ' + str(levelNumber),font, (255, 255, 156), win, 960, 20) #quelle niveau le joueur est
+    draw_text('Level: ' + str(levelNumber),font, (255, 255, 156), win, 960, 20) 
     
         
     if heart == 0: #si le joueur n'a plus de vie, on reset tout sans revenir au menu principal
@@ -646,19 +621,15 @@ while run:
     win.blit(text_coin, [1100, 20])
     win.blit(pygame.image.load('Sprite/Merchant_png/Coin.png').convert_alpha(),[1070, 15])
 
-    #---------------------------#
     #-----SYSTEME DE PIECES-----#
-    #---------------------------#
 
 
-    def coin(): #le systeme de pièce
+    def coin():
         coin_add = 2 / frame_count * (Map_Change / 0.95 * 1000) #plus le joueur passe du temps dans le niveau, moins il gagnera de pièce, plus il avance dans les niveaux plus il gagnera de pièce par niveau
         money = round(coin_add)
         return money
 
-    #---------------------------#
     #-----SYSTEME DE COEURS-----#
-    #---------------------------#
     
     if Level_collision == 1:
         level.keeps = 0
@@ -686,9 +657,7 @@ while run:
       win.blit(pygame.image.load('Sprite/Heart/Heart_0.png').convert_alpha(),[10, 20])
     
 
-    #---------------------------#
     #----------Marchant---------#
-    #---------------------------# 
     
     if Level_Marchand == 1: #on vérifie içi quelle superpouvoirs le joueur à chosis
         if merchant_menu() == 1:
@@ -705,22 +674,22 @@ while run:
             coin_sum -= 250
             heart +=1
             
-    #---------------------------#
+
     #----Ecran de fin de jeu----#
-    #---------------------------# 
+
 
     if Map_Change == 18: #quand le joueur arrive à la fin du jeu, un écran de fin de jeu est affiché, il est ensuite enmenner au menu principal
-        stTotal = str(coinTotal) + ' coins'
+        stTotal = str(coinTotal) + ' Pieces'
         pygame.draw.rect(win, (0, 0, 0), endBackground)
-        draw_text('YOU WON THIS DELICIOUS PIZZA !!', power_font, (255, 255, 243), win, 350, 50)
+        draw_text('Vous Gagnez cette Pizza !!', power_font, (255, 255, 243), win, 350, 50)
         win.blit( pygame.transform.scale(pygame.image.load('Sprite/Heart/pizza.png').convert_alpha(), (150, 150)),[850, 15])
-        draw_text('YOU HAVE GAINED A TOTAL OF ' +  stTotal , power_font, (255, 255, 156), win, 350, 232)
-        draw_text('YOU DID REALLY GOOD', power_font, (255, 255, 243), win, 350, 265)
+        draw_text('Vous AVEZ GAGNER UN TOTAL DE ' +  stTotal , power_font, (255, 255, 156), win, 350, 232)
+        draw_text('FELICITATION', power_font, (255, 255, 243), win, 350, 265)
         pygame.draw.rect(win, (48,48,48), buttonEnd)
-        draw_text('COME BACK TO THE MAIN MENU', font, (255, 255, 243), win, 690, 290)        
+        draw_text('REVENEZ AU MENU PRINCIPAL', font, (255, 255, 243), win, 690, 290)        
         if buttonEnd.collidepoint((mx, my)):
             pygame.draw.rect(win, (136, 88, 224), buttonEnd)
-            draw_text('COME BACK TO THE MAIN MENU', font, (255, 255, 243), win, 690, 290)
+            draw_text('REVENEZ AU MENU PRINCIPAL', font, (255, 255, 243), win, 690, 290)
             if click:
                 heart = 0
                 g.curr_menu.display_menu()
@@ -730,16 +699,15 @@ while run:
                 
             
         
-    #-------------------------------#
     #-----INITIALISATION DU JEU-----#
-    #-------------------------------#
+    
     pygame.display.flip() 
 
     clock.tick(30)  #fps
 
     win.blit(
         picture,
-        (0, 0))  # initialisation du background ; win.blit(picture, (0, 0))
+        (0, 0))  # initialisation du background ;
     level.show()  #montre le niveau dans la fenetre
 
     for event in pygame.event.get():
