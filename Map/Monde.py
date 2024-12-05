@@ -1,5 +1,5 @@
 # Code des Monde du jeu
-### Variables: "X" = Tile
+### Variables: "X" = Tuile
 # ; "P" = Piege 
 # ; "M" = Marchand 
 # ; "E" = Ennemi 
