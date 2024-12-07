@@ -616,7 +616,7 @@ while run:
         levelNumber = 0
                      
                             
-    coin_string = "Coins: {0}".format(coin_sum)
+    coin_string = "Pieces: {0}".format(coin_sum)
     text_coin = font.render(coin_string, True, (255, 255, 255))
     win.blit(text_coin, [1100, 20])
     win.blit(pygame.image.load('Sprite/Merchant_png/Coin.png').convert_alpha(),[1070, 15])
