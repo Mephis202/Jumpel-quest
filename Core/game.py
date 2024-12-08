@@ -9,7 +9,6 @@ class Game():
     self.DISPLAY_W, self.DISPLAY_H = 1200, 495
     self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
     self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
-    #self.font_name = '8-BIT WONDER.TTF'
     self.font_name = pygame.font.get_default_font()
     self.BLACK, self.WHITE, self.RED, self.GREEN, self.ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (0, 255, 0), (255, 165, 0)
     self.main_menu = MainMenu(self)
@@ -22,7 +21,7 @@ class Game():
     while self.playing:
       self.check_events()
       self.display.fill(self.BLACK)
-      self.draw_text('THANKS FOR PLAYING!', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
+      self.draw_text('Merci pour avoir jouer', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
       self.window.blit(self.display, (0, 0))
       pygame.display.update()
       self.reset_keys()
